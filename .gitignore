@@ -1,0 +1,33 @@
+## .NET ##
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ebugFinal/
+[Dd]evelopment/
+[Dd]evelopmentPublic/
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+## ASP.NET ##
+# User secrets
+secrets.json
+
+# .NET Core / .NET 5+
+project.lock.json
+project.fragment.lock.json
+
+# MacOS system files
+.DS_Store
