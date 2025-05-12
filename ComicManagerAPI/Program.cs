@@ -1,4 +1,5 @@
 using ComicManagerAPI.Data;
+using ComicManagerAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 
@@ -9,9 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new Exception("Error: 'DefaultConnection' not found.");
 
+
+builder.Services.AddScoped<IGenreRepository, GenreEfRepository>();
+builder.Services.AddScoped<IGenreService, GenreService>();
+
 //--> inyectar context. new version of Pomelo needs more arguments (ServerVersion)
 builder.Services.AddDbContext<DataContext>(options => 
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
 
 
 using (var connection = new MySqlConnection(connectionString))
@@ -29,6 +35,7 @@ using (var connection = new MySqlConnection(connectionString))
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -41,7 +48,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
+app.MapControllers();
 
 app.Run();

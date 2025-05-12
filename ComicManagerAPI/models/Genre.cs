@@ -51,4 +51,25 @@ public class Genre
         ComicGenres = new List<ComicGenre>();
     }
 
+
+        public void UpdatePercentage(int totalComics)
+    {
+        if (totalComics > 0)
+        {
+            PercentageOfComics = Math.Round((decimal)Comics.Count * 100 / totalComics, 2);
+        }
+    }
+
+
+    public void UpdatePopularity()
+    {
+        
+        decimal popularThresholdPercentage = 20;
+
+        if (PercentageOfComics > popularThresholdPercentage )
+        {
+            IsPopular = true;
+        }
+    }
+
 }
