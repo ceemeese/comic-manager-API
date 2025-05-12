@@ -37,6 +37,7 @@ public class Comic
     [Required]
     public DateTime? DateCreated { get; private set; }
     public List<ComicGenre> ComicGenres { get; set; } = new ();
+    public List<UserComic> UserComics { get; set; } = new();
     [Required]
     public ComicType Type { get; set; }
     
@@ -61,7 +62,7 @@ public class Comic
     public Comic() {}
 
     //Constructor
-    public Comic (string name, string author, string publisher, int yearPublished, decimal price,  bool isForAdults,   List<Genre> genres, ComicType type, DateTime? dateCreated = null)
+    public Comic (string name, string author, string publisher, int yearPublished, decimal price,  bool isForAdults, List<Genre> genres, ComicType type, DateTime? dateCreated = null)
     {
         Name = name;
         Author = author;
@@ -69,9 +70,8 @@ public class Comic
         YearPublished = yearPublished;
         Price = price;
         IsForAdults = isForAdults;
-        ComicGenres = genres.Select(g => new ComicGenre(this, g)).ToList();
         Type = type;
         DateCreated = dateCreated ?? DateTime.Now;
     }
-
 }
+

@@ -40,7 +40,7 @@ public class Genre
     public Genre() {}
 
 
-    public Genre (string name, string description, int priority, string icon, List<Comic>? comics = null, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {
+    public Genre (string name, string description, int priority, string icon, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {
         Name = name;
         Description = description;
         Priority = priority;
@@ -48,7 +48,7 @@ public class Genre
         DateCreated = dateCreated ?? DateTime.Now;
         PercentageOfComics = percentageOfComics;
         IsPopular = isPopular;
-        ComicGenres = comics?.Select(c => new ComicGenre(c, this)).ToList() ?? new List<ComicGenre>();
+        ComicGenres = new List<ComicGenre>();
     }
 
 }
