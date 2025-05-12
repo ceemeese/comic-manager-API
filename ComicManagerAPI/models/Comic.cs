@@ -11,9 +11,8 @@ class InvalidComicException: Exception
     }
 }
 
-class Comic 
+public class Comic 
 {
-
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

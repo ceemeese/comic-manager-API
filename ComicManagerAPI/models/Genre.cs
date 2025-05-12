@@ -11,7 +11,7 @@ class InvalidGenreException: Exception
     }
 }
 
-class Genre
+public class Genre
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

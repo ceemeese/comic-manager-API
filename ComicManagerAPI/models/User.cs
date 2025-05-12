@@ -11,7 +11,7 @@ class InvalidUserException: Exception
     }
 }
 
-class User
+public class User
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
