@@ -34,7 +34,11 @@ public class User
     public List<UserComic> UserComics { get; set; } 
     
 
-    public User() {}
+    public User() 
+    {
+        DateCreated = DateTime.Now;
+        serComics = new List<UserComic>();
+    }
 
     //Constructor
     public User(string name, string mail, string password, string telephone, bool isAdmin, DateTime? dateCreated = null ) 
