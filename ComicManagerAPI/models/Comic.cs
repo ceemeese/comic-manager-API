@@ -11,13 +11,12 @@ class InvalidComicException: Exception
     }
 }
 
-class Comic 
+public class Comic 
 {
-
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; private set; }
+    public int Id { get; set; }
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
@@ -37,7 +36,8 @@ class Comic
     public bool IsForAdults { get; set; } = true;
     [Required]
     public DateTime? DateCreated { get; private set; }
-    public List<Genre> Genres { get; set; } = new List<Genre>();
+    public List<ComicGenre> ComicGenres { get; set; } = new ();
+    public List<UserComic> UserComics { get; set; } = new();
     [Required]
     public ComicType Type { get; set; }
     
@@ -62,7 +62,7 @@ class Comic
     public Comic() {}
 
     //Constructor
-    public Comic (string name, string author, string publisher, int yearPublished, decimal price,  bool isForAdults,   List<Genre> genres, ComicType type, DateTime? dateCreated = null)
+    public Comic (string name, string author, string publisher, int yearPublished, decimal price,  bool isForAdults, List<Genre> genres, ComicType type, DateTime? dateCreated = null)
     {
         Name = name;
         Author = author;
@@ -70,9 +70,8 @@ class Comic
         YearPublished = yearPublished;
         Price = price;
         IsForAdults = isForAdults;
-        Genres = genres ?? new List<Genre>();
         Type = type;
         DateCreated = dateCreated ?? DateTime.Now;
     }
-
 }
+
