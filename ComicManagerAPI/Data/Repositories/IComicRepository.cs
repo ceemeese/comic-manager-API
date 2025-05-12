@@ -9,6 +9,5 @@ namespace ComicManagerAPI.Data
         Task AddAsync(Comic comic);
         Task UpdateAsync(Comic comic);
         Task<bool> DeleteAsync(int id);
-        Task InitDataAsync();
     }
 }

@@ -37,7 +37,7 @@ public class User
     public User() 
     {
         DateCreated = DateTime.Now;
-        serComics = new List<UserComic>();
+        UserComics = new List<UserComic>();
     }
 
     //Constructor
