@@ -15,7 +15,7 @@ public class Genre
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; private set; }
+    public int Id { get; set; }
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
@@ -26,7 +26,7 @@ public class Genre
     public int Priority{ get; set; }
     [Required]
     public string Icon { get; set; }
-    public List<Comic> Comics { get; set; } = new List<Comic>();
+    public List<ComicGenre> ComicGenres { get; set; } = new ();
     public DateTime? DateCreated { get; private set; }
     public decimal PercentageOfComics { get; private set; }
     public bool IsPopular { get; private set; } = false;
@@ -40,7 +40,7 @@ public class Genre
     public Genre() {}
 
 
-    public Genre (string name, string description, int priority, string icon, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {
+    public Genre (string name, string description, int priority, string icon, List<Comic>? comics = null, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {
         Name = name;
         Description = description;
         Priority = priority;
@@ -48,6 +48,7 @@ public class Genre
         DateCreated = dateCreated ?? DateTime.Now;
         PercentageOfComics = percentageOfComics;
         IsPopular = isPopular;
+        ComicGenres = comics?.Select(c => new ComicGenre(c, this)).ToList() ?? new List<ComicGenre>();
     }
 
 }

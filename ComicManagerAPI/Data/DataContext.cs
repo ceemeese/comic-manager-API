@@ -15,11 +15,25 @@ namespace ComicManagerAPI.Data
     public DbSet<User> Users{ get; set; }
     
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-       
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
         
-    }
+        modelBuilder.Entity<ComicGenre>()
+            .HasKey(cg => new { cg.ComicId, cg.GenreId });
+
+
+            modelBuilder.Entity<ComicGenre>()
+            .HasOne(cg => cg.Comic)
+            .WithMany(cg => cg.ComicGenres)
+            .HasForeignKey(cg => cg.ComicId);
+
+
+            modelBuilder.Entity<ComicGenre>()
+            .HasOne(cg => cg.Genre)
+            .WithMany(cg => cg.ComicGenres)
+            .HasForeignKey(cg => cg.GenreId);
+            
+        }
 
     }
 

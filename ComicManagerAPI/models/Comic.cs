@@ -16,7 +16,7 @@ public class Comic
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; private set; }
+    public int Id { get; set; }
     [Required]
     [MaxLength(255)]
     public string Name { get; set; }
@@ -36,7 +36,7 @@ public class Comic
     public bool IsForAdults { get; set; } = true;
     [Required]
     public DateTime? DateCreated { get; private set; }
-    public List<Genre> Genres { get; set; } = new List<Genre>();
+    public List<ComicGenre> ComicGenres { get; set; } = new ();
     [Required]
     public ComicType Type { get; set; }
     
@@ -69,7 +69,7 @@ public class Comic
         YearPublished = yearPublished;
         Price = price;
         IsForAdults = isForAdults;
-        Genres = genres ?? new List<Genre>();
+        ComicGenres = genres.Select(g => new ComicGenre(this, g)).ToList();
         Type = type;
         DateCreated = dateCreated ?? DateTime.Now;
     }
