@@ -37,7 +37,10 @@ public class Genre
     }
 
 
-    public Genre() {}
+    public Genre() 
+    {
+        DateCreated = DateTime.Now;
+    }
 
 
     public Genre (string name, string description, int priority, string icon, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {
@@ -49,6 +52,27 @@ public class Genre
         PercentageOfComics = percentageOfComics;
         IsPopular = isPopular;
         ComicGenres = new List<ComicGenre>();
+    }
+
+
+    public void UpdatePercentage(int totalComics)
+    {
+        if (totalComics > 0)
+        {
+            PercentageOfComics = Math.Round((decimal)ComicGenres.Count * 100 / totalComics, 2);
+        }
+    }
+
+
+    public void UpdatePopularity()
+    {
+        
+        decimal popularThresholdPercentage = 20;
+
+        if (PercentageOfComics > popularThresholdPercentage )
+        {
+            IsPopular = true;
+        }
     }
 
 }
