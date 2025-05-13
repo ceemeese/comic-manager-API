@@ -13,10 +13,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 //Repositorios
 builder.Services.AddScoped<IGenreRepository, GenreEfRepository>();
 builder.Services.AddScoped<IUserRepository, UserEfRepository>();
+builder.Services.AddScoped<IComicRepository, ComicEfRepository>();
 
 //Servicios
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IComicService, ComicService>();
 
 //--> inyectar context. new version of Pomelo needs more arguments (ServerVersion)
 builder.Services.AddDbContext<DataContext>(options => 

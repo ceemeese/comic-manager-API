@@ -37,7 +37,10 @@ public class Genre
     }
 
 
-    public Genre() {}
+    public Genre() 
+    {
+        DateCreated = DateTime.Now;
+    }
 
 
     public Genre (string name, string description, int priority, string icon, DateTime? dateCreated = null, decimal percentageOfComics = 0, bool isPopular = false) {

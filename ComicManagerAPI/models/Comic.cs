@@ -59,7 +59,10 @@ public class Comic
         return Name;
     }
 
-    public Comic() {}
+    public Comic() 
+    {
+        DateCreated = DateTime.Now;
+    }
 
     //Constructor
     public Comic (string name, string author, string publisher, int yearPublished, decimal price,  bool isForAdults, List<Genre> genres, ComicType type, DateTime? dateCreated = null)
