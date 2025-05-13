@@ -1,0 +1,81 @@
+using ComicManagerAPI.Data;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+
+namespace ComicManagerAPI.Controllers
+{
+    [Route("/api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+
+        private readonly IUserService _serviceUser;
+
+
+        public UserController(IUserService service)
+        {
+            _serviceUser = service;
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<List<User>>> GetUsers()
+        {
+            var users = await _serviceUser.GetAllAsync();
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUser(int id)
+        {
+            var user = await _serviceUser.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<User>> CreateUser(User user)
+        {
+            await _serviceUser.AddAsync(user);
+            return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user);
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<User>> UpdateUser(int id, User user)
+        {
+            var isExistingUser = await _serviceUser.GetByIdAsync(id);
+            if (isExistingUser == null)
+            {
+                return NotFound();
+            }
+            
+            isExistingUser.Name = user.Name;
+            isExistingUser.Mail = user.Mail;
+            isExistingUser.Password = user.Password;
+            isExistingUser.Telephone = user.Telephone;  
+
+
+            await _serviceUser.UpdateAsync(isExistingUser);
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var user = await _serviceUser.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            await _serviceUser.DeleteAsync(id);
+            return NoContent();
+        }
+
+    }
+}

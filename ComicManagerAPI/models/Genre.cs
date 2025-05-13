@@ -52,11 +52,11 @@ public class Genre
     }
 
 
-        public void UpdatePercentage(int totalComics)
+    public void UpdatePercentage(int totalComics)
     {
         if (totalComics > 0)
         {
-            PercentageOfComics = Math.Round((decimal)Comics.Count * 100 / totalComics, 2);
+            PercentageOfComics = Math.Round((decimal)ComicGenres.Count * 100 / totalComics, 2);
         }
     }
 
