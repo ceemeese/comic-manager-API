@@ -1,0 +1,13 @@
+using Models;
+
+namespace ComicManagerAPI.Data
+{
+    public interface IComicGenreRepository
+    {
+        Task AddAsync(ComicGenre comicGenre);
+        Task<bool> DeleteAsync(int comicId, int genreId);
+        Task<bool> ExistsAsync(int comicId, int genreId);
+        Task<List<Genre>> GetGenresByComicIdAsync(int comicId);
+        Task<List<Comic>> GetComicsByGenreIdAsync(int genreId);
+    }
+}
