@@ -1,4 +1,5 @@
 using ComicManagerAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -20,6 +21,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<ComicGenre>> CreateComicGenre(ComicGenre comicgenre)
         {
             await _serviceComicGenre.AddAsync(comicgenre);
@@ -29,6 +31,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpDelete("{comicId}/{genreId}")]
+        [Authorize]
         public async Task<ActionResult> DeleteComicGenre(int comicId, int genreId)
         {
             var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);
@@ -44,6 +47,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("genres/{comicId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Genre>>> GetGenresByComicId(int comicId)
         {
             return await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
@@ -51,6 +55,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("comics/{genreId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Comic>>> GetComicsByGenreId(int genreId)
         {
             return await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
@@ -59,6 +64,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("{comicId}/{genreId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ComicGenre>> GetComicGenre(int comicId, int genreId)
         {
             var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);

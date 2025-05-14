@@ -1,4 +1,5 @@
 using ComicManagerAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -19,6 +20,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<List<Comic>>> GetComics()
         {
             var comics = await _serviceComic.GetAllAsync();
@@ -26,6 +28,7 @@ namespace ComicManagerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Comic>> GetComic(int id)
         {
             var comic = await _serviceComic.GetByIdAsync(id);
@@ -37,6 +40,7 @@ namespace ComicManagerAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Comic>> CreateComic(Comic comic)
         {
             await _serviceComic.AddAsync(comic);
@@ -45,6 +49,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<Comic>> UpdateComic(int id, Comic comic)
         {
             var isExistingComic = await _serviceComic.GetByIdAsync(id);
@@ -69,6 +74,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteComic(int id)
         {
             var comic = await _serviceComic.GetByIdAsync(id);

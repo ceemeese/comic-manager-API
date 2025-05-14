@@ -1,4 +1,5 @@
 using ComicManagerAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -20,6 +21,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<UserComic>> CreateUserComic(UserComic usercomic)
         {
             await _serviceUserComic.AddAsync(usercomic);
@@ -29,6 +31,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpDelete("{userId}/{comicId}")]
+        [Authorize]
         public async Task<ActionResult> DeleteUserComic(int userId, int comicId)
         {
             var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
@@ -44,6 +47,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("users/{comicId}")]
+        [Authorize]
         public async Task<ActionResult<List<User>>> GetUsersByComicId(int comicId)
         {
             return await _serviceUserComic.GetUsersByComicIdAsync(comicId);
@@ -51,6 +55,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("comics/{userId}")]
+        [Authorize]
         public async Task<ActionResult<List<Comic>>> GetComicsByUserId(int userId)
         {
             return await _serviceUserComic.GetComicsByUserIdAsync(userId);
@@ -59,6 +64,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet("{userId}/{comicId}")]
+        [Authorize]
         public async Task<ActionResult<UserComic>> GetUserComic(int userId, int comicId)
         {
             var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);

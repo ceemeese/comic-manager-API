@@ -1,4 +1,5 @@
 using ComicManagerAPI.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -19,6 +20,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             var users = await _serviceUser.GetAllAsync();
@@ -26,6 +28,7 @@ namespace ComicManagerAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
@@ -37,6 +40,7 @@ namespace ComicManagerAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<User>> CreateUser(User user)
         {
             await _serviceUser.AddAsync(user);
@@ -45,6 +49,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult<User>> UpdateUser(int id, User user)
         {
             var isExistingUser = await _serviceUser.GetByIdAsync(id);
@@ -65,6 +70,7 @@ namespace ComicManagerAPI.Controllers
 
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
@@ -78,6 +84,7 @@ namespace ComicManagerAPI.Controllers
         }
 
         [HttpPost("init")]
+        [AllowAnonymous]
          public async Task<IActionResult> InitData()
         {
             await _serviceUser.InitDataAsync();
