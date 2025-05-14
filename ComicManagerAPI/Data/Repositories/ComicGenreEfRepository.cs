@@ -57,5 +57,12 @@ namespace ComicManagerAPI.Data
             .ToListAsync();
        }
 
+
+       public async Task<ComicGenre?> GetByIdAsync(int comicId, int genreId)
+        {
+            return await _dbContext.ComicsGenres
+                .FirstOrDefaultAsync(cg => cg.ComicId == comicId && cg.GenreId == genreId);
+        }
+
     }
 }
