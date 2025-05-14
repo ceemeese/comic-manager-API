@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 
 namespace ComicManagerAPI.Data
@@ -13,6 +14,8 @@ namespace ComicManagerAPI.Data
     public DbSet<Comic> Comics { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<User> Users{ get; set; }
+    public DbSet<ComicGenre> ComicsGenres{ get; set; }
+    public DbSet<UserComic> UsersComics{ get; set; }
     
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,8 +53,19 @@ namespace ComicManagerAPI.Data
             .WithMany(uc => uc.UserComics)
             .HasForeignKey(uc => uc.ComicId);
         
+
+        modelBuilder.Entity<User>()
+            .HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "Admin", 
+                    Mail = "admin@admin.com", 
+                    Password = "admin", 
+                    Telephone = "666666666",
+                    IsAdmin = true,
+                }
+             );
         }
-
     }
-
 }
