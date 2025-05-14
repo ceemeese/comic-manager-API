@@ -14,6 +14,8 @@ namespace ComicManagerAPI.Data
     public DbSet<Comic> Comics { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<User> Users{ get; set; }
+    public DbSet<ComicGenre> ComicsGenres{ get; set; }
+    public DbSet<UserComic> UsersComics{ get; set; }
     
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
