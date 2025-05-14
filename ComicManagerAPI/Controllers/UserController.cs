@@ -77,5 +77,12 @@ namespace ComicManagerAPI.Controllers
             return NoContent();
         }
 
+        [HttpPost("init")]
+         public async Task<IActionResult> InitData()
+        {
+            await _serviceUser.InitDataAsync();
+            return Ok("Datos de usuario iniciados correctamente");
+        }
+
     }
 }

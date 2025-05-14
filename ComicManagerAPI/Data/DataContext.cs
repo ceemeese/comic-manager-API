@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models;
 
 namespace ComicManagerAPI.Data
@@ -50,8 +51,19 @@ namespace ComicManagerAPI.Data
             .WithMany(uc => uc.UserComics)
             .HasForeignKey(uc => uc.ComicId);
         
+
+        modelBuilder.Entity<User>()
+            .HasData(
+                new User
+                {
+                    Id = 1,
+                    Name = "Admin", 
+                    Mail = "admin@admin.com", 
+                    Password = "admin", 
+                    Telephone = "666666666",
+                    IsAdmin = true,
+                }
+             );
         }
-
     }
-
 }
