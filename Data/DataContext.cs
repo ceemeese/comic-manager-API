@@ -62,7 +62,6 @@ namespace Data
                     Mail = "admin@admin.com", 
                     Password = "admin", 
                     Telephone = "666666666",
-                    IsAdmin = true
                 }
              );
         }
