@@ -48,7 +48,7 @@ namespace API.Controllers
 
         [HttpGet("users/{comicId}")]
         [Authorize]
-        public async Task<ActionResult<List<User>>> GetUsersByComicId(int comicId)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsersByComicId(int comicId)
         {
             return await _serviceUserComic.GetUsersByComicIdAsync(comicId);
         }
@@ -56,7 +56,7 @@ namespace API.Controllers
 
         [HttpGet("comics/{userId}")]
         [Authorize]
-        public async Task<ActionResult<List<Comic>>> GetComicsByUserId(int userId)
+        public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByUserId(int userId)
         {
             return await _serviceUserComic.GetComicsByUserIdAsync(userId);
         }

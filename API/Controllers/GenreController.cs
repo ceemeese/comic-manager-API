@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Genre>>> GetGenres()
+        public async Task<ActionResult<IEnumerable<Genre>>> GetGenres()
         {
             var genres = await _serviceGenre.GetAllAsync();
             return Ok(genres);

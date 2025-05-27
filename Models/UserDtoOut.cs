@@ -13,7 +13,7 @@ public class UserDtoOut
     public DateTime? DateCreated { get; set; }
 
     public string Telephone { get; set; }
+    public string Role { get; set; }
 
-    public bool IsAdmin { get; set; }
 }
 

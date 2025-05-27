@@ -21,6 +21,4 @@ public class UserDtoIn
     [Required]
     [RegularExpression(@"^\d{9}$", ErrorMessage = "El teléfono debe tener 9 dígitos")]
     public string Telephone { get; set; }
-
-    public bool IsAdmin { get; set; } = false;
 }

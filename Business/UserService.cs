@@ -14,20 +14,45 @@ namespace Business
         }
 
 
-        public async Task<List<User>> GetAllAsync()
+        public async Task<IEnumerable<UserDtoOut>> GetAllAsync()
         {
-            return await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetAllAsync();
+            return users.Select(u => new UserDtoOut
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Mail = u.Mail,
+                DateCreated = u.DateCreated,
+                Telephone = u.Telephone
+            });
         }
 
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<UserDtoOut> GetByIdAsync(int id)
         {
-            return await _userRepository.GetByIdAsync(id);
+            var user = await _userRepository.GetByIdAsync(id);
+
+            return new UserDtoOut
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Mail = user.Mail,
+                DateCreated = user.DateCreated,
+                Telephone = user.Telephone
+            };
         }
 
 
-        public async Task AddAsync(User user)
+        public async Task AddAsync(UserDtoIn userDto)
         {
+            var user = new User
+            {
+                Name = userDto.Name,
+                Mail = userDto.Mail,
+                Password = userDto.Password,
+                Telephone = userDto.Telephone
+            };
+
             await _userRepository.AddAsync(user);
         }
 

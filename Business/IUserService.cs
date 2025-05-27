@@ -4,9 +4,9 @@ namespace Business
 {
     public interface IUserService 
     {
-        Task<List<User>> GetAllAsync();
-        Task<User> GetByIdAsync(int id);
-        Task AddAsync(User user);
+        Task<IEnumerable<UserDtoOut>> GetAllAsync();
+        Task<UserDtoOut> GetByIdAsync(int id);
+        Task AddAsync(UserDtoIn user);
         Task UpdateAsync(User user);
         Task DeleteAsync(int id);
         Task InitDataAsync();
