@@ -35,6 +35,7 @@ builder.Services.AddScoped<IComicRepository, ComicEfRepository>();
 
 //Servicios
 builder.Services.AddScoped<IGenreService, GenreService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IComicService, ComicService>();
 
@@ -101,6 +102,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -24,7 +24,6 @@ public class User
     [MaxLength(255)]
     public string Mail { get; set; }
     [Required]
-    [StringLength(10, ErrorMessage = "La contraseña debe tener entre 6 y 10 caracteres", MinimumLength = 6)]
     public string Password { get; set; }
     [Required]
     public DateTime? DateCreated { get; private set; }

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -65,27 +66,42 @@ namespace Data.Repositories
                 await _dbContext.SaveChangesAsync();
             }
         }
-        
 
-         public UserDtoOut AddUserFromCredentials(UserDtoIn userDtoIn) {
-            var userId = 1;
-            var user = new UserDtoOut { Id = userId, Name = userDtoIn.Name, Mail = userDtoIn.Mail, Role = Rols.User};
+
+        public async Task<User> AddUserFromCredentials(UserDtoIn userDtoIn, string hashedPassword)
+        {
+            //var userId = 1;
+
+            if (_dbContext.Users.Any(u => u.Mail == userDtoIn.Mail))
+            {
+                throw new InvalidOperationException("Este mail ya está registrado");
+            }
+
+
+            var user = new User
+            {
+                Name = userDtoIn.Name,
+                Mail = userDtoIn.Mail,
+                Password = hashedPassword,
+                Telephone = userDtoIn.Telephone,
+                Role = Rols.User
+            };
+
             if (user == null)
             {
                 throw new KeyNotFoundException("Usuario no creado");
             }
+
+            await _dbContext.Users.AddAsync(user);
+            await _dbContext.SaveChangesAsync();
+
             return user;
         }
-        
-        public UserDtoOut GetUserFromCredentials(LoginDtoIn loginDtoIn) {
-            if ((loginDtoIn.Mail != "a27877@svalero.com") && (loginDtoIn.Password != "1234"))
-            {
-                throw new KeyNotFoundException("Usuario no encontrado");
-            } else {
-                var user = new UserDtoOut { Id = 1, Name = "cmalmierca", Mail = "a27877@svalero.com", Role = Rols.Admin};
-                return user;
-            }
-        }
 
+
+        public async Task<User> GetUserByMail(string mail)
+        {
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Mail == mail);
+        }
     }
 }

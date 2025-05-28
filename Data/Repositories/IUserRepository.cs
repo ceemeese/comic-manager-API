@@ -10,7 +10,7 @@ namespace Data.Repositories
         Task UpdateAsync(User user);
         Task<bool> DeleteAsync(int id);
         Task InitDataAsync();
-        public UserDtoOut AddUserFromCredentials(UserDtoIn userDtoIn);
-        public UserDtoOut GetUserFromCredentials(LoginDtoIn loginDtoIn);
+        Task<User> AddUserFromCredentials(UserDtoIn userDtoIn, string hashedPassword);
+        Task<User> GetUserByMail(string email);
     }
 }

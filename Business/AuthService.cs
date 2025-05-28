@@ -23,16 +23,44 @@ namespace Business
             _repository = repository;
         }
 
-        public string Login(LoginDtoIn loginDtoIn)
+        public async Task<string> Login(LoginDtoIn loginDtoIn)
         {
-            var user = _repository.GetUserFromCredentials(loginDtoIn);
-            return GenerateToken(user);
+            var user = await _repository.GetUserByMail(loginDtoIn.Mail);
+
+            if (user == null || !PasswordHasher.VerifyPassword(loginDtoIn.Password, user.Password ))
+            {
+                throw new KeyNotFoundException("Usuario o contraseña incorrectos");
+            }
+
+            var userLogged = new UserDtoOut()
+            {   
+                Id = user.Id,
+                Name = user.Name,
+                Mail = user.Mail,
+                Telephone = user.Telephone,
+                Role = user.Role,
+            };
+
+            return GenerateToken(userLogged);
         }
 
-        public string Register(UserDtoIn userDtoIn)
+        public async Task<string> Register(UserDtoIn userDtoIn)
         {
-            var user = _repository.AddUserFromCredentials(userDtoIn);
-            return GenerateToken(user);
+            var hashedPassword = PasswordHasher.HashPassword(userDtoIn.Password);
+
+            var user = await _repository.AddUserFromCredentials(userDtoIn, hashedPassword);
+
+            var userRegistered = new UserDtoOut()
+            {   
+                Id = user.Id,
+                Name = user.Name,
+                Mail = user.Mail,
+                Telephone = user.Telephone,
+                Role = user.Role,
+            };
+
+            
+            return GenerateToken(userRegistered);
         }
 
         public string GenerateToken(UserDtoOut userDTOOut)
@@ -62,19 +90,19 @@ namespace Business
             return tokenString;
         }
 
-        public bool HasAccessToResource(int requestedUserID, ClaimsPrincipal user) 
+        public bool HasAccessToResource(int requestedUserID, ClaimsPrincipal user)
         {
             var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out int userId)) 
-            { 
-                return false; 
+            if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return false;
             }
             var isOwnResource = userId == requestedUserID;
 
             var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
             if (roleClaim != null) return false;
             var isAdmin = roleClaim!.Value == Rols.Admin;
-            
+
             var hasAccess = isOwnResource || isAdmin;
             return hasAccess;
         }
