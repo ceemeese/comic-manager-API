@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Comic>> CreateComic(Comic comic)
         {
             await _serviceComic.AddAsync(comic);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Comic>> UpdateComic(int id, Comic comic)
         {
             var isExistingComic = await _serviceComic.GetByIdAsync(id);
@@ -74,7 +74,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles =  Rols.Admin)]
         public async Task<ActionResult> DeleteComic(int id)
         {
             var comic = await _serviceComic.GetByIdAsync(id);

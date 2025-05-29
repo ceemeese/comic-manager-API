@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Genre>> CreateGenre(Genre genre)
         {
             await _serviceGenre.AddAsync(genre);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Genre>> UpdateGenre(int id, Genre genre)
         {
             var isExistingGenre = await _serviceGenre.GetByIdAsync(id);
@@ -70,7 +70,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteGenre(int id)
         {
             var genre = await _serviceGenre.GetByIdAsync(id);

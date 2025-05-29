@@ -20,7 +20,7 @@ namespace API.Controllers
 
 
         [HttpGet (Name = "GetAllUsers")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<IEnumerable<UserDtoOut>>> GetAllUsers()
         {
             var users = await _serviceUser.GetAllAsync();
@@ -28,7 +28,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetUser")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<UserDtoOut>> GetUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
@@ -63,7 +63,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize (Roles = "admin")]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
