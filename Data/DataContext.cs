@@ -53,16 +53,25 @@ namespace Data
             .HasForeignKey(uc => uc.ComicId);
         
 
+        modelBuilder.Entity<Comic>()
+            .Property(c => c.Price )
+            .HasPrecision(5, 2);
+
+        modelBuilder.Entity<Genre>()
+            .Property(g => g.PercentageOfComics )
+            .HasPrecision(5, 2);
+        
+
         modelBuilder.Entity<User>()
             .HasData(
                 new User
                 {
                     Id = 1,
-                    Name = "Admin", 
-                    Mail = "admin@admin.com", 
-                    Password = "admin", 
+                    Name = "Admin",
+                    Mail = "admin@admin.com",
+                    Password = "$2a$11$Q112S8j3gRYS7zx34t.wtep.sFcddFoGaFlFTjcX4etbwEIsutj3m",
                     Telephone = "666666666",
-                    IsAdmin = true
+                    Role = "admin",
                 }
              );
         }

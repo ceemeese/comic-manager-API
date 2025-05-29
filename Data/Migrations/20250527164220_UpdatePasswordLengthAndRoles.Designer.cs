@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComicManagerAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250527164220_UpdatePasswordLengthAndRoles")]
+    partial class UpdatePasswordLengthAndRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,7 +152,8 @@ namespace ComicManagerAPI.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Role")
                         .IsRequired()
@@ -167,10 +171,10 @@ namespace ComicManagerAPI.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2025, 5, 29, 14, 26, 43, 106, DateTimeKind.Local).AddTicks(4150),
+                            DateCreated = new DateTime(2025, 5, 27, 18, 42, 20, 85, DateTimeKind.Local).AddTicks(3710),
                             Mail = "admin@admin.com",
                             Name = "Admin",
-                            Password = "$2a$11$Q112S8j3gRYS7zx34t.wtep.sFcddFoGaFlFTjcX4etbwEIsutj3m",
+                            Password = "admin",
                             Role = "admin",
                             Telephone = "666666666"
                         });

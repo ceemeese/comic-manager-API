@@ -30,25 +30,25 @@ public class User
     [Required]
     [RegularExpression(@"^\d{9}$", ErrorMessage = "El teléfono debe tener 9 dígitos")]
     public string Telephone { get; set; }
-    public bool IsAdmin { get; set; } = false;
     public List<UserComic> UserComics { get; set; } 
+    public string Role { get; set; }
     
 
-    public User() 
+    public User()
     {
         DateCreated = DateTime.Now;
         UserComics = new List<UserComic>();
     }
 
     //Constructor
-    public User(string name, string mail, string password, string telephone, bool isAdmin, DateTime? dateCreated = null ) 
+    public User(string name, string mail, string password, string telephone, string role, DateTime? dateCreated = null)
     {
         Name = name;
         Mail = mail;
         Password = password;
         DateCreated = dateCreated ?? DateTime.Now;
         Telephone = telephone;
-        IsAdmin = isAdmin;
+        Role = role;
         UserComics = new List<UserComic>();
     }
 

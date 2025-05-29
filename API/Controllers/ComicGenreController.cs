@@ -48,7 +48,7 @@ namespace API.Controllers
 
         [HttpGet("genres/{comicId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Genre>>> GetGenresByComicId(int comicId)
+        public async Task<ActionResult<IEnumerable<Genre>>> GetGenresByComicId(int comicId)
         {
             return await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
         }
@@ -56,7 +56,7 @@ namespace API.Controllers
 
         [HttpGet("comics/{genreId}")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Comic>>> GetComicsByGenreId(int genreId)
+        public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByGenreId(int genreId)
         {
             return await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
         }

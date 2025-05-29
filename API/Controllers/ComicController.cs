@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Comic>>> GetComics()
+        public async Task<ActionResult<IEnumerable<Comic>>> GetComics()
         {
             var comics = await _serviceComic.GetAllAsync();
             return Ok(comics);

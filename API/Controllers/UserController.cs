@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<List<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserDtoOut>>> GetUsers()
         {
             var users = await _serviceUser.GetAllAsync();
             return Ok(users);
@@ -29,7 +29,7 @@ namespace API.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserDtoOut>> GetUser(int id)
         {
             var user = await _serviceUser.GetByIdAsync(id);
             if (user == null)
@@ -39,16 +39,9 @@ namespace API.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<ActionResult<User>> CreateUser(User user)
-        {
-            await _serviceUser.AddAsync(user);
-            return CreatedAtAction(nameof(GetUser), new {id = user.Id}, user);
-        }
 
 
-        [HttpPut("{id}")]
+        /*[HttpPut("{id}")]
         [Authorize]
         public async Task<ActionResult<User>> UpdateUser(int id, User user)
         {
@@ -66,7 +59,7 @@ namespace API.Controllers
 
             await _serviceUser.UpdateAsync(isExistingUser);
             return NoContent();
-        }
+        }*/
 
 
         [HttpDelete("{id}")]
