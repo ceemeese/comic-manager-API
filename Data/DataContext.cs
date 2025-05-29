@@ -69,7 +69,7 @@ namespace Data
                     Id = 1,
                     Name = "Admin",
                     Mail = "admin@admin.com",
-                    Password = "admin",
+                    Password = "$2a$11$Q112S8j3gRYS7zx34t.wtep.sFcddFoGaFlFTjcX4etbwEIsutj3m",
                     Telephone = "666666666",
                     Role = "admin",
                 }
