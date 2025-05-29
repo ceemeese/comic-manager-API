@@ -7,13 +7,13 @@ namespace API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class GenresController : ControllerBase
     {
 
         private readonly IGenreService _serviceGenre;
 
 
-        public GenreController(IGenreService service)
+        public GenresController(IGenreService service)
         {
             _serviceGenre = service;
         }

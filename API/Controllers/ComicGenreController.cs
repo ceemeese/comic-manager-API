@@ -31,7 +31,7 @@ namespace API.Controllers
 
 
 
-        [HttpDelete("{comicId}/{genreId}")]
+        [HttpDelete("comics/{comicId}/genres/{genreId}")]
         [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteComicGenre(int comicId, int genreId)
         {
@@ -47,24 +47,26 @@ namespace API.Controllers
 
 
 
-        [HttpGet("genres/{comicId}")]
+        [HttpGet("comics/{comicId}/genres", Name = "GetAllGenresByComicId")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Genre>>> GetGenresByComicId(int comicId)
         {
-            return await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
+            var genres = await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
+            return Ok(genres);
         }
 
 
-        [HttpGet("comics/{genreId}")]
+        [HttpGet("genres/{genreId}/comics", Name = "GetAllComicsByGenreId")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByGenreId(int genreId)
         {
-            return await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
+            var comics = await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
+            return Ok(comics);
         }
 
 
 
-        [HttpGet("{comicId}/{genreId}")]
+        [HttpGet("{comicId}/{genreId}", Name = "GetComicGenreByIds")]
         [AllowAnonymous]
         public async Task<ActionResult<ComicGenre>> GetComicGenre(int comicId, int genreId)
         {

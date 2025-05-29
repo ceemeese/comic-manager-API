@@ -7,13 +7,13 @@ namespace API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
 
         private readonly IUserService _serviceUser;
 
 
-        public UserController(IUserService service)
+        public UsersController(IUserService service)
         {
             _serviceUser = service;
         }

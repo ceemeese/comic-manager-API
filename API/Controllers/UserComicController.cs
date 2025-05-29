@@ -30,7 +30,7 @@ namespace API.Controllers
 
 
 
-        [HttpDelete("{userId}/{comicId}")]
+        [HttpDelete("users/{userId}/comics/{comicId}")]
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult> DeleteUserComic(int userId, int comicId)
         {
@@ -46,15 +46,16 @@ namespace API.Controllers
 
 
 
-        [HttpGet("users/{comicId}")]
-        [Authorize (Roles = "admin,user")]
+        [HttpGet("comics/{comicId}/users", Name ="GetUsersByComicId")]
+        [Authorize(Roles = "admin,user")]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersByComicId(int comicId)
         {
-            return await _serviceUserComic.GetUsersByComicIdAsync(comicId);
+            var users = await _serviceUserComic.GetUsersByComicIdAsync(comicId);
+            return Ok(users);
         }
 
 
-        [HttpGet("comics/{userId}")]
+        [HttpGet("users/{userId}/comics", Name ="GetComicsByUserId")]
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByUserId(int userId)
         {
@@ -63,7 +64,7 @@ namespace API.Controllers
 
 
 
-        [HttpGet("{userId}/{comicId}")]
+        [HttpGet("users/{userId}/comics/{comicId}", Name ="GetUserComicByIds")]
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<UserComic>> GetUserComic(int userId, int comicId)
         {

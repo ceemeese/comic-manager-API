@@ -7,13 +7,13 @@ namespace API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class ComicController : ControllerBase
+    public class ComicsController : ControllerBase
     {
 
         private readonly IComicService _serviceComic;
 
 
-        public ComicController(IComicService service)
+        public ComicsController(IComicService service)
         {
             _serviceComic = service;
         }
