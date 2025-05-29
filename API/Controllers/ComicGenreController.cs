@@ -1,5 +1,6 @@
 using Business;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -21,7 +22,7 @@ namespace API.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<ComicGenre>> CreateComicGenre(ComicGenre comicgenre)
         {
             await _serviceComicGenre.AddAsync(comicgenre);
@@ -31,7 +32,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{comicId}/{genreId}")]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteComicGenre(int comicId, int genreId)
         {
             var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);
