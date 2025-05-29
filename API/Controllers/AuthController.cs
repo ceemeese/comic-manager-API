@@ -1,4 +1,5 @@
 using Business;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 
@@ -18,6 +19,7 @@ namespace API.Controllers
 
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDtoIn loginDtoIn)
         {
             try
@@ -43,6 +45,7 @@ namespace API.Controllers
 
 
         [HttpPost("Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(UserDtoIn userDtoIn)
         {
             try
@@ -50,7 +53,7 @@ namespace API.Controllers
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
-                } 
+                }
 
                 var token = await _authService.Register(userDtoIn);
                 return Ok(token);

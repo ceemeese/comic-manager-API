@@ -7,27 +7,27 @@ namespace API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class GenreController : ControllerBase
+    public class GenresController : ControllerBase
     {
 
         private readonly IGenreService _serviceGenre;
 
 
-        public GenreController(IGenreService service)
+        public GenresController(IGenreService service)
         {
             _serviceGenre = service;
         }
 
 
-        [HttpGet]
+        [HttpGet (Name = "GetAllGenres")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetGenres()
+        public async Task<ActionResult<IEnumerable<Genre>>> GetAllGenres()
         {
             var genres = await _serviceGenre.GetAllAsync();
             return Ok(genres);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetGenre")]
         [AllowAnonymous]
         public async Task<ActionResult<Genre>> GetGenre(int id)
         {
@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Genre>> CreateGenre(Genre genre)
         {
             await _serviceGenre.AddAsync(genre);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Genre>> UpdateGenre(int id, Genre genre)
         {
             var isExistingGenre = await _serviceGenre.GetByIdAsync(id);
@@ -70,7 +70,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteGenre(int id)
         {
             var genre = await _serviceGenre.GetByIdAsync(id);

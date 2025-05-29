@@ -7,27 +7,27 @@ namespace API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class ComicController : ControllerBase
+    public class ComicsController : ControllerBase
     {
 
         private readonly IComicService _serviceComic;
 
 
-        public ComicController(IComicService service)
+        public ComicsController(IComicService service)
         {
             _serviceComic = service;
         }
 
 
-        [HttpGet]
+        [HttpGet (Name = "GetAllComics")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Comic>>> GetComics()
+        public async Task<ActionResult<IEnumerable<Comic>>> GetAllComics()
         {
             var comics = await _serviceComic.GetAllAsync();
             return Ok(comics);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetComic")]
         [AllowAnonymous]
         public async Task<ActionResult<Comic>> GetComic(int id)
         {
@@ -40,7 +40,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Comic>> CreateComic(Comic comic)
         {
             await _serviceComic.AddAsync(comic);
@@ -49,7 +49,7 @@ namespace API.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<Comic>> UpdateComic(int id, Comic comic)
         {
             var isExistingComic = await _serviceComic.GetByIdAsync(id);
@@ -74,7 +74,7 @@ namespace API.Controllers
 
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize (Roles =  Rols.Admin)]
         public async Task<ActionResult> DeleteComic(int id)
         {
             var comic = await _serviceComic.GetByIdAsync(id);
