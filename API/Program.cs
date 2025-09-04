@@ -32,12 +32,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddScoped<IGenreRepository, GenreEfRepository>();
 builder.Services.AddScoped<IUserRepository, UserEfRepository>();
 builder.Services.AddScoped<IComicRepository, ComicEfRepository>();
+builder.Services.AddScoped<IUserComicRepository, UserComicEfRepository>();
+builder.Services.AddScoped<IComicGenreRepository, ComicGenreEfRepository>();
 
 //Servicios
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IComicService, ComicService>();
+builder.Services.AddScoped<IUserComicService, UserComicService>();
+builder.Services.AddScoped<IComicGenreService, ComicGenreService>();
 
 //--> inyectar context. new version of Pomelo needs more arguments (ServerVersion)
 builder.Services.AddDbContext<DataContext>(options => 
@@ -64,7 +68,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Comic Manager API", Version = "v1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

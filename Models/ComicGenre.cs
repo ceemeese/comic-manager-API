@@ -4,11 +4,9 @@ namespace Models;
 
 public class ComicGenre
 {
-    [Key]
     public int ComicId { get; private set;}
     public required Comic Comic { get; set; }
 
-    [Key]
     public int GenreId { get; private set; }
     public required Genre Genre { get; set; }
 

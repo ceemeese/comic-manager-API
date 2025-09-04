@@ -4,11 +4,11 @@ namespace Data.Repositories
 {
     public interface IUserComicRepository
     {
-        Task AddAsync(UserComic userComic);
-        Task<bool> DeleteAsync(int userId, int comicId);
+        Task<UserComic> AddAsync(UserComic userComic);
+        Task<bool> DeleteAsync(UserComic relation);
         Task<bool> ExistsAsync(int userId, int comicId);
         Task<List<User>> GetUsersByComicIdAsync(int comicId);
         Task<List<Comic>> GetComicsByUserIdAsync(int userId);
-        Task<UserComic> GetByIdAsync(int comicId, int genreId);
+        Task<UserComic?> GetByIdAsync(int userId, int comicId);
     }
 }
