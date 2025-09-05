@@ -14,18 +14,16 @@ namespace Data.Repositories
         }
 
 
-       public async Task AddAsync(ComicGenre comicGenre)
-       {
-            await _dbContext.ComicsGenres.AddAsync(comicGenre);
+        public async Task<ComicGenre> AddAsync(ComicGenre comicGenre)
+        {
+            var created = await _dbContext.ComicsGenres.AddAsync(comicGenre);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
        }
 
 
-        public async Task<bool> DeleteAsync(int comicId, int genreId)
+        public async Task<bool> DeleteAsync(ComicGenre relation)
         {
-            var relation = await _dbContext.ComicsGenres.FirstOrDefaultAsync(cg => cg.ComicId == comicId && cg.GenreId == genreId);
-            if (relation == null) { return false; }
-
             _dbContext.ComicsGenres.Remove(relation);
             await _dbContext.SaveChangesAsync();
             return true;

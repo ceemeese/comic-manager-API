@@ -20,6 +20,12 @@ namespace Business
 
         public async Task<UserComicDtoOut> AddAsync(UserComicDtoIn usercomic)
         {
+            if (usercomic == null)
+                throw new ArgumentNullException(nameof(usercomic));
+
+            var exists = await _usercomicRepository.ExistsAsync(usercomic.UserId, usercomic.ComicId);
+            if (exists)
+                throw new InvalidOperationException("La relación ya existe");
 
             var userComicEntity = new UserComic
             {

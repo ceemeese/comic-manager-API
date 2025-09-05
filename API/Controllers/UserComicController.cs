@@ -25,7 +25,8 @@ namespace API.Controllers
         public async Task<ActionResult<UserComicDtoOut>> CreateUserComic(UserComicDtoIn usercomic)
         {
             var created = await _serviceUserComic.AddAsync(usercomic);
-            return CreatedAtAction(nameof(GetUserComic), new {userId = created.UserId, comicId = created.ComicId}, created);
+            return CreatedAtAction(nameof(GetUserComic),
+            new { userId = created.UserId, comicId = created.ComicId }, created);
         }
 
 

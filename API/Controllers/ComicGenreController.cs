@@ -23,10 +23,30 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<ComicGenre>> CreateComicGenre(ComicGenre comicgenre)
+        public async Task<ActionResult<ComicGenreDtoOut>> CreateComicGenre(ComicGenreDtoIn comicgenre)
         {
-            await _serviceComicGenre.AddAsync(comicgenre);
-            return CreatedAtAction(nameof(GetComicGenre), new {comicId = comicgenre.ComicId, userId = comicgenre.GenreId}, comicgenre);
+            try
+            {
+                var created = await _serviceComicGenre.AddAsync(comicgenre);
+                return CreatedAtAction(nameof(GetComicGenre),
+                    new { comicId = created.ComicId, genreId = created.GenreId }, created);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -35,33 +55,61 @@ namespace API.Controllers
         [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteComicGenre(int comicId, int genreId)
         {
-            var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);
-            if (comicgenre == null)
+            try
             {
-                return NotFound();
+                await _serviceComicGenre.DeleteAsync(comicId, genreId);
+                return NoContent();
             }
-
-            await _serviceComicGenre.DeleteAsync(comicId, genreId);
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+            
         }
 
 
 
         [HttpGet("comics/{comicId}/genres", Name = "GetAllGenresByComicId")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetGenresByComicId(int comicId)
+        public async Task<ActionResult<IEnumerable<GenreDtoOut>>> GetGenresByComicId(int comicId)
         {
-            var genres = await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
-            return Ok(genres);
+            try
+            {
+                var genres = await _serviceComicGenre.GetGenresByComicIdAsync(comicId);
+                return Ok(genres);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
         [HttpGet("genres/{genreId}/comics", Name = "GetAllComicsByGenreId")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByGenreId(int genreId)
+        public async Task<ActionResult<IEnumerable<ComicDtoOut>>> GetComicsByGenreId(int genreId)
         {
-            var comics = await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
-            return Ok(comics);
+            try
+            {
+                var comics = await _serviceComicGenre.GetComicsByGenreIdAsync(genreId);
+                return Ok(comics);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -70,12 +118,19 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ComicGenre>> GetComicGenre(int comicId, int genreId)
         {
-            var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);
-            if (comicgenre == null)
+            try
             {
-                return NotFound();
+                var comicgenre = await _serviceComicGenre.GetByIdAsync(comicId, genreId);
+                return Ok(comicgenre);
             }
-            return Ok(comicgenre);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }  
         }
     }
 }

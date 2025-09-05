@@ -4,25 +4,22 @@ namespace Models;
 
 public class ComicGenre
 {
-    public int ComicId { get; private set;}
-    public required Comic Comic { get; set; }
+    public int ComicId { get; set;}
+    public Comic Comic { get; set; }
 
-    public int GenreId { get; private set; }
-    public required Genre Genre { get; set; }
+    public int GenreId { get; set; }
+    public Genre Genre { get; set; }
 
 
 
     public ComicGenre() {}
 
 
-    public ComicGenre( Comic comic, Genre genre)
+    public ComicGenre(int comicId, int genreId)
     {
-        Comic = comic;
-        ComicId = comic.Id;
-        Genre = genre;
-        GenreId = genre.Id; 
+        ComicId = comicId;
+        GenreId = genreId; 
     }
-
 }
 
 
