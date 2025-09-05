@@ -23,6 +23,14 @@ namespace Business
             if (usercomic == null)
                 throw new ArgumentNullException(nameof(usercomic));
 
+             _ = await _comicRepository.GetByIdAsync(usercomic.ComicId)
+                ?? throw new KeyNotFoundException($"Cómic con id {usercomic.ComicId} no encontrado");
+
+
+            _ = await _userRepository.GetByIdAsync(usercomic.UserId)
+                ?? throw new KeyNotFoundException($"Usuario con id {usercomic.UserId} no encontrado");
+
+
             var exists = await _usercomicRepository.ExistsAsync(usercomic.UserId, usercomic.ComicId);
             if (exists)
                 throw new InvalidOperationException("La relación ya existe");
@@ -70,11 +78,9 @@ namespace Business
 
         public async Task<List<UserDtoOut>> GetUsersByComicIdAsync(int comicId)
         {
-            var comicExists = await _comicRepository.GetByIdAsync(comicId);
-            if (comicExists == null)
-            {
-                throw new KeyNotFoundException($"Cómic con id {comicId} no encontrado");
-            }
+            _ =await _comicRepository.GetByIdAsync(comicId)
+                ?? throw new KeyNotFoundException($"Cómic con id {comicId} no encontrado");
+
             var users = await _usercomicRepository.GetUsersByComicIdAsync(comicId);
 
             return users.Select(u => new UserDtoOut
@@ -91,13 +97,11 @@ namespace Business
 
         public async Task<List<ComicDtoOut>> GetComicsByUserIdAsync(int userId)
         {
-            var userExists = await _userRepository.GetByIdAsync(userId);
-            if (userExists == null)
-            {
-                throw new KeyNotFoundException($"Usuario con id {userId} no encontrado");
-            }
+            _ = await _userRepository.GetByIdAsync(userId)
+                ?? throw new KeyNotFoundException($"Usuario con id {userId} no encontrado");
 
             var comics = await _usercomicRepository.GetComicsByUserIdAsync(userId);
+
             return comics.Select(c => new ComicDtoOut
             {
                 Id = c.Id,
@@ -112,7 +116,12 @@ namespace Business
 
         public async Task<UserComic?> GetByIdAsync(int userId, int comicId)
         {
-            return await _usercomicRepository.GetByIdAsync(userId, comicId);
+            var usercomic = await _usercomicRepository.GetByIdAsync(userId, comicId);
+            if (usercomic == null)
+            {
+                throw new KeyNotFoundException($"Relación entre usuario con id {userId} y cómic con id {comicId} no encontrada");
+            };
+            return usercomic;
         }
     }
     

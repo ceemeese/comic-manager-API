@@ -24,9 +24,28 @@ namespace API.Controllers
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<UserComicDtoOut>> CreateUserComic(UserComicDtoIn usercomic)
         {
-            var created = await _serviceUserComic.AddAsync(usercomic);
-            return CreatedAtAction(nameof(GetUserComic),
-            new { userId = created.UserId, comicId = created.ComicId }, created);
+            try
+            {
+                var created = await _serviceUserComic.AddAsync(usercomic);
+                return CreatedAtAction(nameof(GetUserComic),
+                new { userId = created.UserId, comicId = created.ComicId }, created);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -97,12 +116,19 @@ namespace API.Controllers
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<UserComic>> GetUserComic(int userId, int comicId)
         {
-            var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
-            if (usercomic == null)
+            try
             {
-                return NotFound();
+                var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
+                return Ok(usercomic);
             }
-            return Ok(usercomic);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
     }
 }
