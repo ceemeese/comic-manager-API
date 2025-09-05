@@ -4,25 +4,21 @@ namespace Models;
 
 public class UserComic
 {
-    [Key]
-    public int UserId { get; private set;}
-    public required User User { get; set; }
+    public int UserId { get; set;}
+    public User User { get; set; }
 
-    [Key]
-    public int ComicId { get; private set; }
-    public required Comic Comic { get; set; }
+    public int ComicId { get; set; }
+    public Comic Comic { get; set; }
 
 
 
     public UserComic() {}
 
 
-    public UserComic( User user, Comic comic)
+    public UserComic( int userId, int comicId)
     {
-        User = user;
-        UserId = user.Id;
-        Comic = comic;
-        ComicId = comic.Id; 
+        UserId = userId;
+        ComicId = comicId; 
     }
 
 }

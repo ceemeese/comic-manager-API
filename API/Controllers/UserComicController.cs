@@ -22,10 +22,30 @@ namespace API.Controllers
 
         [HttpPost]
         [Authorize (Roles = "admin,user")]
-        public async Task<ActionResult<UserComic>> CreateUserComic(UserComic usercomic)
+        public async Task<ActionResult<UserComicDtoOut>> CreateUserComic(UserComicDtoIn usercomic)
         {
-            await _serviceUserComic.AddAsync(usercomic);
-            return CreatedAtAction(nameof(GetUserComic), new {userId = usercomic.UserId, comicId = usercomic.ComicId}, usercomic);
+            try
+            {
+                var created = await _serviceUserComic.AddAsync(usercomic);
+                return CreatedAtAction(nameof(GetUserComic),
+                new { userId = created.UserId, comicId = created.ComicId }, created);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -34,24 +54,40 @@ namespace API.Controllers
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult> DeleteUserComic(int userId, int comicId)
         {
-            var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
-            if (usercomic == null)
+            try
             {
-                return NotFound();
+                await _serviceUserComic.DeleteAsync(userId, comicId);
+                return NoContent();
             }
-
-            await _serviceUserComic.DeleteAsync(userId, comicId);
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
 
-        [HttpGet("comics/{comicId}/users", Name ="GetUsersByComicId")]
+        [HttpGet("comics/{comicId}/users", Name = "GetUsersByComicId")]
         [Authorize(Roles = "admin,user")]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsersByComicId(int comicId)
+        public async Task<ActionResult<IEnumerable<UserDtoOut>>> GetUsersByComicId(int comicId)
         {
-            var users = await _serviceUserComic.GetUsersByComicIdAsync(comicId);
-            return Ok(users);
+            try
+            {
+                var users = await _serviceUserComic.GetUsersByComicIdAsync(comicId);
+                return Ok(users);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -59,7 +95,19 @@ namespace API.Controllers
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<IEnumerable<Comic>>> GetComicsByUserId(int userId)
         {
-            return await _serviceUserComic.GetComicsByUserIdAsync(userId);
+            try
+            {
+                var comics = await _serviceUserComic.GetComicsByUserIdAsync(userId);
+                return Ok(comics);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -68,12 +116,19 @@ namespace API.Controllers
         [Authorize (Roles = "admin,user")]
         public async Task<ActionResult<UserComic>> GetUserComic(int userId, int comicId)
         {
-            var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
-            if (usercomic == null)
+            try
             {
-                return NotFound();
+                var usercomic = await _serviceUserComic.GetByIdAsync(userId, comicId);
+                return Ok(usercomic);
             }
-            return Ok(usercomic);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
     }
 }

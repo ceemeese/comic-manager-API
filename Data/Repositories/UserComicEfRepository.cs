@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore;
 using Models;
 
@@ -14,18 +15,16 @@ namespace Data.Repositories
         }
 
 
-       public async Task AddAsync(UserComic userComic)
-       {
-            await _dbContext.UsersComics.AddAsync(userComic);
+        public async Task<UserComic> AddAsync(UserComic userComic)
+        {
+            var created = await _dbContext.UsersComics.AddAsync(userComic);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
        }
 
 
-        public async Task<bool> DeleteAsync(int userId, int comicId)
+        public async Task<bool> DeleteAsync(UserComic relation)
         {
-            var relation = await _dbContext.UsersComics.FirstOrDefaultAsync(uc => uc.UserId == userId && uc.ComicId == comicId);
-            if (relation == null) { return false; }
-
             _dbContext.UsersComics.Remove(relation);
             await _dbContext.SaveChangesAsync();
             return true;
@@ -42,11 +41,12 @@ namespace Data.Repositories
 
 
         public async Task<List<User>> GetUsersByComicIdAsync(int comicId)
-       {
-           return await _dbContext.UsersComics
-            .Where(uc => uc.ComicId == comicId)
-            .Select(uc => uc.User)
-            .ToListAsync();
+        {
+            return await _dbContext.UsersComics
+             .Where(uc => uc.ComicId == comicId)
+             .Select(uc => uc.User)
+             .ToListAsync();
+            
        }
 
        public async Task<List<Comic>> GetComicsByUserIdAsync(int userId)
