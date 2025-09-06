@@ -16,7 +16,7 @@ namespace Data.Repositories
 
 
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<List<User>> GetAllAsync()
         {
             return await _dbContext.Users.ToListAsync();
         }
@@ -27,10 +27,11 @@ namespace Data.Repositories
         }
 
 
-        public async Task AddAsync(User user)
+        public async Task<User> AddAsync(User user)
         {
-            await _dbContext.Users.AddAsync(user);
+            var created = await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
         }
 
 
@@ -41,14 +42,10 @@ namespace Data.Repositories
         }
 
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(User user)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-            if (user == null) { return false; }
-
             _dbContext.Users.Remove(user);
             await _dbContext.SaveChangesAsync();
-            return true;
         }
 
 

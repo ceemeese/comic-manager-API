@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet (Name = "GetAllGenres")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetAllGenres()
+        public async Task<ActionResult<List<Genre>>> GetAllGenres()
         {
             try
             {

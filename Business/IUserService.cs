@@ -6,8 +6,8 @@ namespace Business
     {
         Task<IEnumerable<UserDtoOut>> GetAllAsync();
         Task<UserDtoOut> GetByIdAsync(int id);
-        Task AddAsync(UserDtoIn user);
-        Task UpdateAsync(User user);
+        Task<UserDtoOut> AddAsync(UserDtoIn user);
+        Task UpdateAsync(int id, UserDtoIn userDto);
         Task DeleteAsync(int id);
         Task InitDataAsync();
     }

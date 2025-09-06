@@ -21,7 +21,7 @@ namespace API.Controllers
 
         [HttpGet (Name = "GetAllComics")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<ComicDtoOut>>> GetAllComics()
+        public async Task<ActionResult<List<ComicDtoOut>>> GetAllComics()
         {
             try
             {
