@@ -26,10 +26,11 @@ namespace Data.Repositories
        }
 
 
-       public async Task AddAsync(Comic comic)
-       {
-            await _dbContext.Comics.AddAsync(comic);
+        public async Task<Comic> AddAsync(Comic comic)
+        {
+            var created = await _dbContext.Comics.AddAsync(comic);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
        }
 
 

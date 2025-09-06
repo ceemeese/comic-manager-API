@@ -31,11 +31,9 @@ public class Comic
     [Required]
     public decimal Price { get; set; }
     [Required]
-    public bool IsRead { get; set; } = false;
-    [Required]
     public bool IsForAdults { get; set; } = true;
     [Required]
-    public DateTime? DateCreated { get; private set; }
+    public DateTime DateCreated { get; private set; }
     public List<ComicGenre> ComicGenres { get; set; } = new ();
     public List<UserComic> UserComics { get; set; } = new();
     [Required]
