@@ -4,10 +4,10 @@ namespace Business
 {
     public interface IGenreService 
     {
-        Task<List<Genre>> GetAllAsync();
-        Task<Genre> GetByIdAsync(int id);
-        Task AddAsync(Genre genre);
-        Task UpdateAsync(Genre genre);
+        Task<List<GenreDtoOut>> GetAllAsync();
+        Task<GenreDtoOut> GetByIdAsync(int id);
+        Task<GenreDtoOut> AddAsync(GenreDtoIn genreDto);
+        Task UpdateAsync(int id, GenreDtoIn genreDto);
         Task DeleteAsync(int id);
     }
 }

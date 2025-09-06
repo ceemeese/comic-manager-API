@@ -8,6 +8,6 @@ namespace Data.Repositories
         Task<Comic> GetByIdAsync (int id);
         Task<Comic> AddAsync(Comic comic);
         Task UpdateAsync(Comic comic);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(Comic comic);
     }
 }

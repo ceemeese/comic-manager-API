@@ -104,10 +104,10 @@ namespace Business
 
         public async Task DeleteAsync(int id)
         {
-            _ = await _comicRepository.GetByIdAsync(id)
+            var comic = await _comicRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException("Comic no encontrado");
-            
-            await _comicRepository.DeleteAsync(id);
+
+            await _comicRepository.DeleteAsync(comic);
         }
     }
     

@@ -6,8 +6,8 @@ namespace Data.Repositories
     {
         Task<List <Genre>> GetAllAsync ();
         Task<Genre> GetByIdAsync (int id);
-        Task AddAsync(Genre genre);
+        Task<Genre> AddAsync(Genre genre);
         Task UpdateAsync(Genre genre);
-        Task<bool> DeleteAsync(int id);
+        Task DeleteAsync(Genre genre);
     }
 }
