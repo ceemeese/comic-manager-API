@@ -24,10 +24,10 @@ namespace API.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                /*if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
-                }
+                }*/
 
                 var token = await _authService.Login(loginDtoIn);
                 return Ok(token);

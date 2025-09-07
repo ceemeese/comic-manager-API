@@ -9,10 +9,12 @@ public class UserComic
 
     public int ComicId { get; set; }
     public Comic Comic { get; set; }
+    
+    public bool IsRead { get; set; } = false;
 
 
 
-    public UserComic() {}
+    public UserComic() { }
 
 
     public UserComic( int userId, int comicId)

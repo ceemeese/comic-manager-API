@@ -10,5 +10,6 @@ namespace Data.Repositories
         Task<List<User>> GetUsersByComicIdAsync(int comicId);
         Task<List<Comic>> GetComicsByUserIdAsync(int userId);
         Task<UserComic?> GetByIdAsync(int userId, int comicId);
+        Task UpdateAsync(UserComic userComic);
     }
 }

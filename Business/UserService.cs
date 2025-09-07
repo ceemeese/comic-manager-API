@@ -43,9 +43,11 @@ namespace Business
         }
 
 
-        public async Task AddAsync(UserDtoIn userDto)
+        public async Task<UserDtoOut> AddAsync(UserDtoIn userDto)
         {
-            var user = new User
+            //TODO: Validación si ya existe
+            
+            var userEntity = new User
             {
                 Name = userDto.Name,
                 Mail = userDto.Mail,
@@ -53,25 +55,39 @@ namespace Business
                 Telephone = userDto.Telephone
             };
 
-            await _userRepository.AddAsync(user);
+            var createdUser = await _userRepository.AddAsync(userEntity);
+
+            return new UserDtoOut
+            {
+                Id = createdUser.Id,
+                Name = createdUser.Name,
+                Mail = createdUser.Mail,
+                DateCreated = createdUser.DateCreated,
+                Telephone = createdUser.Telephone
+            };
         }
 
 
-        public async Task UpdateAsync(User user)
+        public async Task UpdateAsync(int id, UserDtoIn userDto)
         {
-            await _userRepository.UpdateAsync(user);
+            var existingUser = await _userRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException("Usuario no encontrado");
+
+            existingUser.Name = userDto.Name;
+            existingUser.Mail = userDto.Mail;
+            existingUser.Password = userDto.Password;
+            existingUser.Telephone = userDto.Telephone;
+
+            await _userRepository.UpdateAsync(existingUser);
         }
 
 
         public async Task DeleteAsync(int id)
         {
-            var user = await _userRepository.GetByIdAsync(id);
-            if (user == null) 
-            {
-                throw new KeyNotFoundException("Usuario no encontrado");
-            }
+            var user = await _userRepository.GetByIdAsync(id)
+                ?? throw new KeyNotFoundException("Usuario no encontrado");
 
-            await _userRepository.DeleteAsync(id);
+            await _userRepository.DeleteAsync(user);
         }
 
 

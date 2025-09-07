@@ -98,7 +98,6 @@ namespace Business
                 Name = c.Name,
                 Author = c.Author,
                 YearPublished = c.YearPublished,
-                IsRead = c.IsRead,
                 Type = c.Type.ToString()
             }).ToList();
         }

@@ -20,7 +20,7 @@ namespace Data.Repositories
             var created = await _dbContext.UsersComics.AddAsync(userComic);
             await _dbContext.SaveChangesAsync();
             return created.Entity;
-       }
+        }
 
 
         public async Task<bool> DeleteAsync(UserComic relation)
@@ -46,16 +46,16 @@ namespace Data.Repositories
              .Where(uc => uc.ComicId == comicId)
              .Select(uc => uc.User)
              .ToListAsync();
-            
-       }
 
-       public async Task<List<Comic>> GetComicsByUserIdAsync(int userId)
-       {
-           return await _dbContext.UsersComics
-            .Where(uc => uc.UserId == userId)
-            .Select(uc => uc.Comic)
-            .ToListAsync();
-       }
+        }
+
+        public async Task<List<Comic>> GetComicsByUserIdAsync(int userId)
+        {
+            return await _dbContext.UsersComics
+             .Where(uc => uc.UserId == userId)
+             .Select(uc => uc.Comic)
+             .ToListAsync();
+        }
 
 
         public async Task<UserComic?> GetByIdAsync(int userId, int comicId)
@@ -63,6 +63,13 @@ namespace Data.Repositories
             return await _dbContext.UsersComics
                 .FirstOrDefaultAsync(uc => uc.UserId == userId && uc.ComicId == comicId);
         }
+        
+
+        public async Task UpdateAsync(UserComic usercomic)
+       {
+            _dbContext.UsersComics.Update(usercomic);
+            await _dbContext.SaveChangesAsync();
+       }
 
     }
 }

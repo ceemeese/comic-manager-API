@@ -26,10 +26,11 @@ namespace Data.Repositories
        }
 
 
-       public async Task AddAsync(Genre genre)
-       {
-            await _dbContext.Genres.AddAsync(genre);
+        public async Task<Genre> AddAsync(Genre genre)
+        {
+            var created = await _dbContext.Genres.AddAsync(genre);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
        }
 
 
@@ -40,14 +41,10 @@ namespace Data.Repositories
        }
 
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Genre genre)
         {
-            var genre = await _dbContext.Genres.FindAsync(id);
-            if (genre == null) { return false; }
-
             _dbContext.Genres.Remove(genre);
             await _dbContext.SaveChangesAsync();
-            return true;
         }
 
     }

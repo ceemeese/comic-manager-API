@@ -26,10 +26,11 @@ namespace Data.Repositories
        }
 
 
-       public async Task AddAsync(Comic comic)
-       {
-            await _dbContext.Comics.AddAsync(comic);
+        public async Task<Comic> AddAsync(Comic comic)
+        {
+            var created = await _dbContext.Comics.AddAsync(comic);
             await _dbContext.SaveChangesAsync();
+            return created.Entity;
        }
 
 
@@ -40,14 +41,10 @@ namespace Data.Repositories
        }
 
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Comic comic)
         {
-            var comic = await _dbContext.Comics.FindAsync(id);
-            if (comic == null) { return false; }
-
             _dbContext.Comics.Remove(comic);
             await _dbContext.SaveChangesAsync();
-            return true;
         }
 
     }

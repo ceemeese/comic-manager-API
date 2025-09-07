@@ -3,7 +3,7 @@ using Models;
 
 namespace Business
 {
-    
+
     public class UserComicService : IUserComicService
     {
         private readonly IUserComicRepository _usercomicRepository;
@@ -23,8 +23,8 @@ namespace Business
             if (usercomic == null)
                 throw new ArgumentNullException(nameof(usercomic));
 
-             _ = await _comicRepository.GetByIdAsync(usercomic.ComicId)
-                ?? throw new KeyNotFoundException($"Cómic con id {usercomic.ComicId} no encontrado");
+            _ = await _comicRepository.GetByIdAsync(usercomic.ComicId)
+               ?? throw new KeyNotFoundException($"Cómic con id {usercomic.ComicId} no encontrado");
 
 
             _ = await _userRepository.GetByIdAsync(usercomic.UserId)
@@ -57,7 +57,7 @@ namespace Business
         public async Task DeleteAsync(int userId, int comicId)
         {
             var relation = await _usercomicRepository.GetByIdAsync(userId, comicId);
-            if (relation == null) 
+            if (relation == null)
             {
                 throw new KeyNotFoundException("Relación User-Comic no encontrada");
             }
@@ -69,7 +69,7 @@ namespace Business
         public async Task ExistsAsync(int userId, int comicId)
         {
             var relation = await _usercomicRepository.GetByIdAsync(userId, comicId);
-            if (relation == null) 
+            if (relation == null)
             {
                 throw new KeyNotFoundException("Relación User-Comic no encontrada");
             }
@@ -78,7 +78,7 @@ namespace Business
 
         public async Task<List<UserDtoOut>> GetUsersByComicIdAsync(int comicId)
         {
-            _ =await _comicRepository.GetByIdAsync(comicId)
+            _ = await _comicRepository.GetByIdAsync(comicId)
                 ?? throw new KeyNotFoundException($"Cómic con id {comicId} no encontrado");
 
             var users = await _usercomicRepository.GetUsersByComicIdAsync(comicId);
@@ -108,7 +108,6 @@ namespace Business
                 Name = c.Name,
                 Author = c.Author,
                 YearPublished = c.YearPublished,
-                IsRead = c.IsRead,
                 Type = c.Type.ToString()
             }).ToList();
         }
@@ -116,13 +115,25 @@ namespace Business
 
         public async Task<UserComic?> GetByIdAsync(int userId, int comicId)
         {
-            var usercomic = await _usercomicRepository.GetByIdAsync(userId, comicId);
-            if (usercomic == null)
-            {
-                throw new KeyNotFoundException($"Relación entre usuario con id {userId} y cómic con id {comicId} no encontrada");
-            };
+            var usercomic = await _usercomicRepository.GetByIdAsync(userId, comicId)
+                ?? throw new KeyNotFoundException($"Relación entre usuario con id {userId} y cómic con id {comicId} no encontrada");
+
             return usercomic;
         }
+
+
+
+        public async Task UpdateAsync(int userId, int comicId, UserComicDtoUpdate usercomicdto)
+        {
+            var relation = await _usercomicRepository.GetByIdAsync(userId, comicId)
+                ?? throw new KeyNotFoundException("Relación User-Comic no encontrada");
+
+            relation.IsRead = usercomicdto.IsRead;
+
+            await _usercomicRepository.UpdateAsync(relation);
+        }
     }
+    
+
     
 }

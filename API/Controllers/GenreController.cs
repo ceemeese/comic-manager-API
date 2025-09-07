@@ -21,51 +21,76 @@ namespace API.Controllers
 
         [HttpGet (Name = "GetAllGenres")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Genre>>> GetAllGenres()
+        public async Task<ActionResult<List<Genre>>> GetAllGenres()
         {
-            var genres = await _serviceGenre.GetAllAsync();
-            return Ok(genres);
+            try
+            {
+                var genres = await _serviceGenre.GetAllAsync();
+                return Ok(genres);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}", Name = "GetGenre")]
         [AllowAnonymous]
         public async Task<ActionResult<Genre>> GetGenre(int id)
         {
-            var genre = await _serviceGenre.GetByIdAsync(id);
-            if (genre == null)
+            try
             {
-                return NotFound();
+                var genre = await _serviceGenre.GetByIdAsync(id);
+                return Ok(genre);
             }
-            return Ok(genre);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         [HttpPost]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<Genre>> CreateGenre(Genre genre)
+        public async Task<ActionResult<GenreDtoOut>> CreateGenre(GenreDtoIn genreDto)
         {
-            await _serviceGenre.AddAsync(genre);
-            return CreatedAtAction(nameof(GetGenre), new {id = genre.Id}, genre);
-        }
+            try
+            {
+                var genre = await _serviceGenre.AddAsync(genreDto);
+                return CreatedAtAction(nameof(GetGenre), new {id = genre.Id}, genre);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest($"Datos inválidos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }   
+
 
 
         [HttpPut("{id}")]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<Genre>> UpdateGenre(int id, Genre genre)
+        public async Task<ActionResult> UpdateGenre(int id, GenreDtoIn genreDto)
         {
-            var isExistingGenre = await _serviceGenre.GetByIdAsync(id);
-            if (isExistingGenre == null)
+            try
             {
-                return NotFound();
+                await _serviceGenre.UpdateAsync(id, genreDto);
+                return NoContent();
             }
-            
-            isExistingGenre.Name = genre.Name;
-            isExistingGenre.Description = genre.Description;
-            isExistingGenre.Priority = genre.Priority;
-            isExistingGenre.Icon = genre.Icon;  
-
-
-            await _serviceGenre.UpdateAsync(isExistingGenre);
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
@@ -73,14 +98,19 @@ namespace API.Controllers
         [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteGenre(int id)
         {
-            var genre = await _serviceGenre.GetByIdAsync(id);
-            if (genre == null)
+            try
             {
-                return NotFound();
+                await _serviceGenre.GetByIdAsync(id);
+                return NoContent();
             }
-
-            await _serviceGenre.DeleteAsync(id);
-            return NoContent();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
     }

@@ -21,67 +21,100 @@ namespace API.Controllers
 
         [HttpGet (Name = "GetAllUsers")]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<IEnumerable<UserDtoOut>>> GetAllUsers()
+        public async Task<ActionResult<List<UserDtoOut>>> GetAllUsers()
         {
-            var users = await _serviceUser.GetAllAsync();
-            return Ok(users);
+            try
+            {
+                var users = await _serviceUser.GetAllAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {    
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }  
         }
 
         [HttpGet("{id}", Name = "GetUser")]
         [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult<UserDtoOut>> GetUser(int id)
         {
-            var user = await _serviceUser.GetByIdAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                var user = await _serviceUser.GetByIdAsync(id);
+                return Ok(user);
             }
-            return Ok(user);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
 
 
-        /*[HttpPut("{id}")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<User>> UpdateUser(int id, User user)
+        public async Task<ActionResult> UpdateUser(int id, UserDtoIn userDto)
         {
-            var isExistingUser = await _serviceUser.GetByIdAsync(id);
-            if (isExistingUser == null)
+            try
             {
-                return NotFound();
+                await _serviceUser.UpdateAsync(id, userDto);
+                return NoContent();
             }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest($"Datos inválidos: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
             
-            isExistingUser.Name = user.Name;
-            isExistingUser.Mail = user.Mail;
-            isExistingUser.Password = user.Password;
-            isExistingUser.Telephone = user.Telephone;  
-
-
-            await _serviceUser.UpdateAsync(isExistingUser);
-            return NoContent();
-        }*/
 
 
         [HttpDelete("{id}")]
         [Authorize (Roles = Rols.Admin)]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            var user = await _serviceUser.GetByIdAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+                await _serviceUser.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
 
-            await _serviceUser.DeleteAsync(id);
-            return NoContent();
+            
         }
 
         [HttpPost("init")]
         [AllowAnonymous]
          public async Task<IActionResult> InitData()
         {
-            await _serviceUser.InitDataAsync();
-            return Ok("Datos de usuario iniciados correctamente");
+            try
+            {
+                await _serviceUser.InitDataAsync();
+                return Ok("Datos de usuario iniciados correctamente");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+            
         }
 
     }
