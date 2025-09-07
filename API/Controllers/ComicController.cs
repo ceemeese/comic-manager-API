@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
 
-        [HttpGet (Name = "GetAllComics")]
+        [HttpGet(Name = "GetAllComics")]
         [AllowAnonymous]
         public async Task<ActionResult<List<ComicDtoOut>>> GetAllComics()
         {
@@ -73,12 +73,12 @@ namespace API.Controllers
             {
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
-            
+
         }
 
 
         [HttpPut("{id}")]
-        [Authorize (Roles = Rols.Admin)]
+        [Authorize(Roles = Rols.Admin)]
         public async Task<ActionResult> UpdateComic(int id, ComicDtoIn comicDto)
         {
             try
@@ -120,5 +120,24 @@ namespace API.Controllers
             }
         }
 
+
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<ComicDtoOut>>> SearchComics([FromQuery] ComicQueryParameters queryParameters)
+        {
+            try
+            {
+                var comics = await _serviceComic.SearchComics(queryParameters);
+
+                if (comics.Count == 0)
+                    return NotFound("No se encontraron cómics que coincidan con los filtros de búsqueda");
+
+                return Ok(comics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
     }
 }

@@ -130,7 +130,7 @@ namespace API.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
-        
+
 
         [HttpPut("user/{userId}/comic/{comicId}")]
         [Authorize(Roles = "admin,user")]
@@ -154,5 +154,6 @@ namespace API.Controllers
                 return StatusCode(500, $"Error interno del servidor: {ex.Message}");
             }
         }
+        
     }
 }
