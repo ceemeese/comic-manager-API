@@ -11,11 +11,13 @@ namespace API.Controllers
     {
 
         private readonly IUserService _serviceUser;
+        private readonly ILogger<UsersController> _logger;
 
 
-        public UsersController(IUserService service)
+        public UsersController(IUserService service, ILogger<UsersController> logger)
         {
             _serviceUser = service;
+            _logger = logger;
         }
 
 
@@ -30,7 +32,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {    
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener todos los usuarios");
+                return StatusCode(500, "Error interno del servidor");
             }  
         }
 
@@ -45,11 +48,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Usuario con ID {id} no encontrado", id);
+                return NotFound($"Usuario con ID {id} no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener el usuario con ID {id}", id);
+                return StatusCode(500, "Error interno del servidor");
             }
         }
 
@@ -66,15 +71,18 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Usuario con ID {id} no encontrado", id);
+                return NotFound($"Usuario con ID {id} no encontrado");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest($"Datos inválidos: {ex.Message}");
+                _logger.LogError(ex, "Datos inválidos proporcionados para el usuario con ID {id}", id);
+                return BadRequest($"Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al actualizar el usuario con ID {id}", id);
+                return StatusCode(500, $"Error interno del servidor al actualizar el usuario con ID {id}");
             }
         }
             
@@ -91,11 +99,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Usuario con ID {id} no encontrado", id);
+                return NotFound($"Usuario con ID {id} no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al eliminar el usuario con ID {id}", id);
+                return StatusCode(500, $"Error interno del servidor al eliminar el usuario con ID {id}");
             }
 
             
@@ -112,7 +122,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error al inicializar los datos de usuario");
+                return StatusCode(500, "Error interno del servidor al inicializar los datos de usuario");
             }
             
         }

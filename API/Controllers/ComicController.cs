@@ -2,6 +2,8 @@ using Business;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Serilog;
+using Utils;
 
 namespace API.Controllers
 {
@@ -11,11 +13,13 @@ namespace API.Controllers
     {
 
         private readonly IComicService _serviceComic;
+        private readonly ILogger<ComicsController> _logger;
 
 
-        public ComicsController(IComicService service)
+        public ComicsController(IComicService service, ILogger<ComicsController> logger)
         {
             _serviceComic = service;
+            _logger = logger;
         }
 
 
@@ -30,7 +34,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener todos los cómics");
+                return StatusCode(500, $"Error interno del servidor al obtener todos los cómics");
             }
         }
 
@@ -46,11 +51,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Cómic con ID {id} no encontrado");
+                return NotFound("Cómic no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, $"Error al obtener el cómic con ID {id}");
+                return StatusCode(500, $"Error interno del servidor al obtener cómic con ID {id}");
             }
         }
 
@@ -67,11 +74,13 @@ namespace API.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest($"Datos inválidos: {ex.Message}");
+                _logger.LogError(ex, "Datos inválidos al crear un nuevo cómic");
+                return BadRequest($"Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al crear un nuevo cómic");
+                return StatusCode(500, $"Error interno del servidor al crear un nuevo cómic");
             }
 
         }
@@ -88,15 +97,18 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Cómic con ID {id} no encontrado para actualización");
+                return NotFound("Cómic no encontrado");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest($"Datos inválidos: {ex.Message}");
+                _logger.LogError(ex, "Datos inválidos al actualizar el cómic");
+                return BadRequest($"Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, $"Error interno del servidor al actualizar el cómic con ID {id}");
+                return StatusCode(500, $"Error interno del servidor al actualizar el cómic con ID {id}");
             }
         }
 
@@ -112,11 +124,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Cómic con ID {id} no encontrado para eliminación");
+                return NotFound("Cómic no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, $"Error interno del servidor al eliminar el cómic con ID {id}");
+                return StatusCode(500, $"Error interno del servidor al eliminar el cómic con ID {id}");
             }
         }
 
@@ -136,7 +150,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al buscar cómics");
+                return StatusCode(500, $"Error interno del servidor al buscar cómics");
             }
         }
     }
