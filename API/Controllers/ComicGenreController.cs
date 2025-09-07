@@ -12,11 +12,13 @@ namespace API.Controllers
     {
 
         private readonly IComicGenreService _serviceComicGenre;
+        private readonly ILogger<ComicGenreController> _logger;
 
 
-        public ComicGenreController(IComicGenreService service)
+        public ComicGenreController(IComicGenreService service, ILogger<ComicGenreController> logger)
         {
             _serviceComicGenre = service;
+            _logger = logger;
         }
 
 
@@ -33,19 +35,23 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Comic o género no encontrado");
+                return NotFound("Cómic o género no encontrado");
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message);
+                _logger.LogError(ex, "Relación cómic-género ya existe");
+                return Conflict("Relación cómic-género ya existe");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "Datos inválidos");
+                return BadRequest("Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al crear la relación cómic-género");
+                return StatusCode(500, "Error interno del servidor al crear la relación cómic-género");
             }
         }
 
@@ -62,11 +68,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Relación cómic-género no encontrada para eliminación");
+                return NotFound("Relación cómic-género no encontrada");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al eliminar la relación cómic-género");
+                return StatusCode(500, "Error interno del servidor al eliminar la relación cómic-género");
             }
             
         }
@@ -84,11 +92,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Cómic con ID {comicId} no encontrado");
+                return NotFound("Cómic no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener géneros por ID de cómic");
+                return StatusCode(500, "Error interno del servidor al obtener géneros por ID de cómic");
             }
         }
 
@@ -104,11 +114,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Género con ID {genreId} no encontrado");
+                return NotFound("Género no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, $"Error interno del servidor al obtener cómics por ID de género");
+                return StatusCode(500, "Error interno del servidor al obtener cómics por ID de género");
             }
         }
 
@@ -125,11 +137,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Relación cómic-género no encontrada");
+                return NotFound("Relación cómic-género no encontrada");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener la relación cómic-género");
+                return StatusCode(500, "Error interno del servidor al obtener la relación cómic-género");
             }  
         }
     }

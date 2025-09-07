@@ -11,11 +11,13 @@ namespace API.Controllers
     {
 
         private readonly IGenreService _serviceGenre;
+        private readonly ILogger<GenresController> _logger;
 
 
-        public GenresController(IGenreService service)
+        public GenresController(IGenreService service, ILogger<GenresController> logger)
         {
             _serviceGenre = service;
+            _logger = logger;
         }
 
 
@@ -30,7 +32,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error al obtener todos los géneros");
+                return StatusCode(500, "Error interno del servidor al obtener todos los géneros");
             }
         }
 
@@ -45,11 +48,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, $"Género con ID {id} no encontrado");
+                return NotFound($"Género con ID {id} no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, $"Error interno del servidor al obtener el género con ID {id}");
+                return StatusCode(500, "Error interno del servidor al obtener el género");
             }
         }
 
@@ -64,11 +69,13 @@ namespace API.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest($"Datos inválidos: {ex.Message}");
+                _logger.LogError(ex, "Datos inválidos al crear el género con {genreName}", genreDto.Name);
+                return BadRequest($"Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al crear el género {genreName}", genreDto.Name);
+                return StatusCode(500, "Error interno del servidor al crear el género");
             }
         }   
 
@@ -85,11 +92,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Género con ID {id} no encontrado para actualización", id);
+                return NotFound($"Género con ID {id} no encontrado para la actualización");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al actualizar el género con ID {id}", id);
+                return StatusCode(500, "Error interno del servidor al actualizar el género");
             }
         }
 
@@ -105,11 +114,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Género con ID {id} no encontrado para eliminación", id);
+                return NotFound($"Género con ID {id} no encontrado para la eliminación");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al eliminar el género con ID {id}", id);
+                return StatusCode(500, "Error interno del servidor al eliminar el género");
             }
         }
 

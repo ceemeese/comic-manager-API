@@ -11,11 +11,13 @@ namespace API.Controllers
     {
 
         private readonly IUserComicService _serviceUserComic;
+        private readonly ILogger<UserComicController> _logger;
 
 
-        public UserComicController(IUserComicService service)
+        public UserComicController(IUserComicService service, ILogger<UserComicController> logger)
         {
             _serviceUserComic = service;
+            _logger = logger;
         }
 
 
@@ -32,19 +34,23 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Error al crear la relación usuario-cómic");
+                return NotFound("Usuario o cómic no encontrado");
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(ex.Message);
+                _logger.LogError(ex, "Relación cómic-género ya existe");
+                return Conflict("Relación cómic-género ya existe");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "Datos inválidos");
+                return BadRequest("Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al crear relación usuario-cómic");
+                return StatusCode(500, "Error interno del servidor al crear relación usuario-cómic");
             }
         }
 
@@ -61,11 +67,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Cómic o usuario no encontrado para eliminar la relación");
+                return NotFound("Cómic o usuario no encontrado para eliminar la relación");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al eliminar la relación usuario-cómic");
+                return StatusCode(500, "Error interno del servidor al eliminar la relación usuario-cómic");
             }
         }
 
@@ -82,11 +90,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Cómic no encontrado");
+                return NotFound("Cómic no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener usuarios por ID de cómic");
+                return StatusCode(500, "Error interno del servidor al obtener usuarios por ID de cómic");
             }
         }
 
@@ -102,11 +112,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Usuario no encontrado");
+                return NotFound("Usuario no encontrado");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener cómics por ID de usuario");
+                return StatusCode(500, "Error interno del servidor al obtener cómics por ID de usuario");
             }
         }
 
@@ -123,11 +135,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Relación usuario-cómic no encontrada");
+                return NotFound("Relación usuario-cómic no encontrada");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al obtener la relación usuario-cómic");
+                return StatusCode(500, "Error interno del servidor al obtener la relación usuario-cómic");
             }
         }
 
@@ -143,15 +157,18 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                _logger.LogError(ex, "Relación usuario-cómic no encontrada para actualización");
+                return NotFound("Relación usuario-cómic no encontrada para actualización");
             }
             catch (ArgumentNullException ex)
             {
-                return BadRequest($"Datos inválidos: {ex.Message}");
+                _logger.LogError(ex, "Datos inválidos");
+                return BadRequest("Datos inválidos");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+                _logger.LogError(ex, "Error interno del servidor al actualizar la relación usuario-cómic");
+                return StatusCode(500, "Error interno del servidor  al actualizar la relación usuario-cómic");
             }
         }
         

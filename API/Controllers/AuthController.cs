@@ -2,6 +2,7 @@ using Business;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Utils;
 
 namespace API.Controllers
 {
@@ -11,10 +12,12 @@ namespace API.Controllers
     {
 
         private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
             _authService = authService;
+            _logger = logger;
         }
 
 
@@ -34,12 +37,13 @@ namespace API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                return Unauthorized(ex.Message);
+                _logger.LogError(ex, "Error de inicio de sesión para el usuario {Mail}", loginDtoIn.Mail);
+                return Unauthorized("Usuario o contraseña incorrectos");
             }
             catch (Exception ex)
             {
-                return BadRequest
-                ("Error generating the token: " + ex.Message);
+                _logger.LogError(ex, "Error al generar el token de {Mail}", loginDtoIn.Mail);
+                return BadRequest("Error al generar token");
             }
         }
 
@@ -60,8 +64,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest
-                ("Error generating the token: " + ex.Message);
+                _logger.LogError(ex, "Error al registrar el usuario {Mail}", userDtoIn.Mail);
+                return BadRequest("Error al generar token: " + ex.Message);
             }
         }
     }
