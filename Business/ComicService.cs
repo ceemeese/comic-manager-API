@@ -1,9 +1,10 @@
 using Data.Repositories;
 using Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business
 {
-    
+
     public class ComicService : IComicService
     {
         private readonly IComicRepository _comicRepository;
@@ -108,6 +109,69 @@ namespace Business
                 ?? throw new KeyNotFoundException("Comic no encontrado");
 
             await _comicRepository.DeleteAsync(comic);
+        }
+        
+
+        public async Task<List<ComicDtoOut>> SearchComics(ComicQueryParameters queryParameters)
+        {
+            IQueryable<Comic> query = _comicRepository.SearchComics();
+
+            
+            if (!string.IsNullOrEmpty(queryParameters.Name))
+            {
+                query = query.Where(c => c.Name.Contains(queryParameters.Name));
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Author))
+            {
+                query = query.Where(c => c.Author.Contains(queryParameters.Author));
+            }
+
+            if (!string.IsNullOrEmpty(queryParameters.Type))
+            {
+                if (Enum.TryParse<Comic.ComicType>(queryParameters.Type, true, out var comicType))
+                {
+                    query = query.Where(c => c.Type == comicType);
+                }
+                else
+                {
+                    throw new ArgumentException("Tipo de cómic no válido");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(queryParameters.SortBy))
+            {
+                switch (queryParameters.SortBy.ToLower())
+                {
+                    case "price":
+                        query = queryParameters.SortDescending
+                            ? query.OrderByDescending(c => c.Price)
+                            : query.OrderBy(c => c.Price);
+                        break;
+                    case "yearpublished":
+                        query = queryParameters.SortDescending
+                            ? query.OrderByDescending(c => c.YearPublished)
+                            : query.OrderBy(c => c.YearPublished);
+                        break;
+                    default:
+                        throw new ArgumentException("Campo para ordenar no válido");
+                }
+            }
+
+            var comics = await query.ToListAsync();
+
+            return comics.Select(c => new ComicDtoOut
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Author = c.Author,
+                Publisher = c.Publisher,
+                YearPublished = c.YearPublished,
+                Price = c.Price,
+                IsForAdults = c.IsForAdults,
+                DateCreated = c.DateCreated,
+                Type = c.Type.ToString()
+            }).ToList();
         }
     }
     
