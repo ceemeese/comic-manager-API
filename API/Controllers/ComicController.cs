@@ -79,7 +79,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<Comic>> UpdateComic(int id, ComicDtoIn comicDto)
+        public async Task<ActionResult> UpdateComic(int id, ComicDtoIn comicDto)
         {
             try
             {

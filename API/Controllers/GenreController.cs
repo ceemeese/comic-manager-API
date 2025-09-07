@@ -76,7 +76,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [Authorize (Roles = Rols.Admin)]
-        public async Task<ActionResult<GenreDtoOut>> UpdateGenre(int id, GenreDtoIn genreDto)
+        public async Task<ActionResult> UpdateGenre(int id, GenreDtoIn genreDto)
         {
             try
             {

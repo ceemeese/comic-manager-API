@@ -57,7 +57,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<User>> UpdateUser(int id, UserDtoIn userDto)
+        public async Task<ActionResult> UpdateUser(int id, UserDtoIn userDto)
         {
             try
             {
