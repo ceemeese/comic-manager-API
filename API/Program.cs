@@ -13,7 +13,7 @@ Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Error()
     //.WriteTo.Console()
     .WriteTo.File(
-        Environment.GetEnvironmentVariable("DATA_PATH") ?? "logs/app.log",
+        Environment.GetEnvironmentVariable("LOG_PATH") ?? "logs/app.log",
         rollingInterval: RollingInterval.Day,
         outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .CreateLogger();
@@ -44,7 +44,14 @@ builder.Host.UseSerilog();
 
 // Add services to the container.
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+//Conexión a la base de datos segun variable entorno
+var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+var user = Environment.GetEnvironmentVariable("DB_USER") ?? "root";
+var password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "my-secret-pw";
+var database = Environment.GetEnvironmentVariable("DB_NAME") ?? "ComicManagerAPIDB";
+
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = $"Server={host};Port=3306;Database={database};Uid={user};Pwd={password};AllowPublicKeyRetrieval=True;Max Pool Size=1000"
     ?? throw new Exception("Error: 'DefaultConnection' not found.");
 
 //Repositorios
@@ -67,20 +74,24 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
 
-
-using (var connection = new MySqlConnection(connectionString))
+bool connected = false;
+while (!connected)
 {
     try
     {
-        connection.Open();
-        Console.WriteLine("Connection succeeded.");
+        using (var connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+            connected = true;
+            Console.WriteLine("Database connection succeeded.");
+        }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Connection error: {ex.Message}");
+        Console.WriteLine($"Database connection error: {ex.Message}");
+        System.Threading.Thread.Sleep(5000);
     }
 }
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
@@ -116,12 +127,22 @@ builder.Services.AddSwaggerGen(opt =>
 
 var app = builder.Build();
 
+//Migraciones
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//Swagger para poder visualizar en 7877
+app.Urls.Add("http://+:7877");
 
 //app.UseHttpsRedirection();
 app.UseAuthentication();
