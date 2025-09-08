@@ -1,6 +1,8 @@
 ## .NET ##
 
 /API/logs
+logs/
+logs-volume/
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
